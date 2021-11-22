@@ -1,0 +1,33 @@
+<% layout('layouts/boilerplate')%>
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
+<h1>All Appointments</h1>
+<table>
+    <tr>
+        <th>Appointment Section</th>
+        <th>Doctor</th>
+        <th>Date</th>
+      </tr>
+<% for (let appointment of appointments){%>  
+        <tr>
+          <td><%= appointment.appointmentSection %></td>
+          <td><%= appointment.appointmentDoctor %></td>
+          <td><%= appointment.appointmentTime %></td>
+        </tr>  
+<% }%>
+</table>
