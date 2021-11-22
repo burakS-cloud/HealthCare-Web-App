@@ -1,6 +1,8 @@
 <% layout('layouts/boilerplate')%>
-<div style="display:flex; justify-content:center;">
-    
+<%- include('../partials/header')%>
+<link rel="stylesheet" href="/css/style.css">
+<div style="margin: 120px 500px;">
+<h1>Register as Doctor</h1>
 <form action="/registerDoc" method="POST" class="validated-form" novalidate>
     
     <div class="mb-3">

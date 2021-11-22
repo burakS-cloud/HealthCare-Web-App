@@ -26,39 +26,7 @@
 
 <!-- header section starts  -->
 
-<header>
-
-<div class="container">
-
-    <a href="#" class="logo"><span>H</span>ealth<span>C</span>are.</a>
-
-    <nav class="nav">
-        <ul>
-            <li><a href="#home">home</a></li>
-            <li><a href="#about">about</a></li>
-            <li><a href="#facility">facility</a></li>
-            <li><a href="#review">review</a></li>
-            <li><a href="#contact">contact</a></li>
-            <li><a href="#post">post</a></li>
-            <li>
-            <% if(!currentUser) {%>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/loginDoc">Login Doc</a></li>
-                <li><a href="/registerDoc">Register Doc</a></li>
-                <% } else {%>
-                <li><a href="/logout">Logout</a></li>
-                <li><a href="/appointments/<%=currentUser._id%>">My Appointments</a></li>
-                <% } %>
-            </li>
-        </ul>
-    </nav>
-
-    <div class="fas fa-bars"></div>
-
-</div>
-
-</header>
+<%- include('partials/header')%>
 
 <!-- header section ends  -->
 
@@ -274,6 +242,8 @@
 
             <div class="col-md-10" data-aos="flip-down">
 
+                <% if(!currentUser) {%>
+
                 <form action="/appointments" method="post">
 
                     <div class="inputBox">
@@ -287,10 +257,10 @@
 
                         <select name="appointmentDoctor" id="appointmentDoctor">
                             <option value="" disabled selected>choose a doctor</option>
-                            <option value="Cardiology">Dr. David Lee MD</option>
-                            <option value="Ophthalmology">Dr. Robert Aaron MD</option>
-                            <option value="Otorhinolaryngology">Dr. Andrea Abad MD</option>
-                            <option value="Dermatology">Dr. Edgar Lancer MD</option>
+                            <option value="Dr. David Lee MD">Dr. David Lee MD</option>
+                            <option value="Dr. Robert Aaron MD">Dr. Robert Aaron MD</option>
+                            <option value="Dr. Andrea Abad MD">Dr. Andrea Abad MD</option>
+                            <option value="Dr. Edgar Lancer MD">Dr. Edgar Lancer MD</option>
                         </select>
 
                         <select name="appointmentTime" id="appointmentTime">
@@ -307,6 +277,43 @@
                     <input type="submit" name="" id="" value="make appointment" class="button">
 
                 </form>
+                <% } else { %>
+                    <form action="/appointments/<%=currentUser._id%>" method="post">
+
+                        <div class="inputBox">
+                            <select name="appointmentSection" id="appointmentSection">
+                                <option value="" disabled selected>choose a section</option>
+                                <option value="Cardiology">Cardiology</option>
+                                <option value="Ophthalmology">Ophthalmology</option>
+                                <option value="Otorhinolaryngology">Otorhinolaryngology</option>
+                                <option value="Dermatology">Dermatology</option>
+                            </select>
+    
+                            <select name="appointmentDoctor" id="appointmentDoctor">
+                                <option value="" disabled selected>choose a doctor</option>
+                                <option value="Dr. David Lee MD">Dr. David Lee MD</option>
+                                <option value="Dr. Robert Aaron MD">Dr. Robert Aaron MD</option>
+                                <option value="Dr. Andrea Abad MD">Dr. Andrea Abad MD</option>
+                                <option value="Dr. Edgar Lancer MD">Dr. Edgar Lancer MD</option>
+                            </select>
+    
+                            <select name="appointmentTime" id="appointmentTime">
+                                <option value="" disabled selected>choose time</option>
+                                <option value="09-11 am">09-11 am</option>
+                                <option value="11-03 pm">11-03 pm</option>
+                                <option value="03-06 pm">03-06 pm</option>
+                                <option value="06-09 pm">06-09 pm</option>
+                            </select>
+                        </div>
+    
+                        <textarea name="" id="" cols="30" rows="10" placeholder="message ( optional )"></textarea>
+    
+                        <input type="submit" name="" id="" value="make appointment" class="button">
+    
+                    </form>
+
+
+              <%  } %>
 
             </div>
 

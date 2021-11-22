@@ -1,5 +1,8 @@
 <% layout('layouts/boilerplate')%>
-<h1>Login</h1>
+<%- include('../partials/header')%>
+<link rel="stylesheet" href="/css/style.css">
+<div style="margin: 200px 500px;">
+<h1>Login as Doctor</h1>
 <form action="/loginDoc" method="POST" class="validated-form" novalidate>
     <div class="mb-3">
         <label class="form-label" for="doctorname">Doctor name</label>
@@ -18,3 +21,4 @@
     </div>
     <button class="btn btn-success">Login</button>
 </form>
+</div>
