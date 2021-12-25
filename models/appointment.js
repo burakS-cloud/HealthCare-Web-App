@@ -6,17 +6,38 @@ const appointmentSchema = new Schema({
         type:String,
         required:true
     },
-    appointmentSection: {
+    appointmentDate: {
+        type:String,
+        required:true
+    },
+    /*appointmentSection: {
         type: Schema.Types.ObjectId,
         ref:'Doctor'
+        //doctorSection'a bakacak
+    },*/
+    appointmentSection: {
+        type:String,
+        required:true
     },
-    appointmentOwner: {
+
+    /*appointmentOwner: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    },
-    appointmentDoctor: {
+    },*/
+
+    /*appointmentOwner: {
+        type:String,
+        required:true
+    },*/
+    
+    /*appointmentOwner: {
         type: Schema.Types.ObjectId,
-        ref: 'Doctor'
+        ref: 'currentUser'
+    }*/
+
+    appointmentDoctor: {
+        type: String,
+        required: true
     }
 });
 

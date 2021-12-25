@@ -34,20 +34,19 @@ const doctorSchema = new Schema({
     }*/
     mySecretary: {
         type:String,
-        unique: true
+        index:true,
+        unique:true,
+        sparse:true
     },
-    patientAppointments: [{
-        type:String
-    }],
     doctorSection: {
         type:String,
         required:true
-    }
-    /*patientAppointments: [{
+    },
+    patientAppointments: [{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Appointment'
         //Doctor -> User -> Appointment şeklinde iç içe populate gerekicek
-    }]*/
+    }]
 });
 
 doctorSchema.plugin(passportLocalMongoose);

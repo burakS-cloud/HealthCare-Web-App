@@ -4,6 +4,10 @@ const passportLocalMongoose = require('passport-local-mongoose');
 //username ve password attribute'ları zaten passport
 //tan geliyor, buraya eklemiyoruz.
 const UserSchema = new Schema({
+    name:{
+        type:String,
+        required:true
+    },
     email: {
         type: String,
         required: true,

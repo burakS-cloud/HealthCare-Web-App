@@ -9,12 +9,12 @@
   font-family: 'Roboto', sans-serif;
   margin:0; padding:0;
   box-sizing: border-box;
-  border:none !important;
+  border:none;
   outline: none !important;
   text-decoration: none !important;
-  text-transform: capitalize;
+  /*text-transform: capitalize;*/
   font-weight: 400;
-  transition: all .2s linear;
+  /*transition: all .2s linear;*/
 }
 
 *::selection{
@@ -84,11 +84,66 @@ section{
 
 header{
   width:100%;
+  height:74.8px;
+  margin-bottom: 100px;
   position: fixed;
   top:0; left: 0;
   padding:2rem 1rem;
   z-index: 1000;
 }
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 1.5em;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.alert-danger{
+font-size: 1.5em;
+margin-top: 7%;
+}
+
+.alert-success {
+  font-size: 1.5em;
+  margin-top: 7%;
+}
+
+
+.validated-form input{
+border: 1px solid black;
+/*width: 100%;*/
+height: 32px;
+font-size: 1.7em;
+
+}
+
+
+#address {
+  border: 1px solid black;
+  font-size: 1.5em;
+}
+
+
+.validated-form label{
+  font-size: 2rem;
+  
+  }
+
+.validated-form button{
+    font-size: 1.5rem;
+    
+    }
 
 .header-active{
   background:#fff;

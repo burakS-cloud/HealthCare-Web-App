@@ -1,10 +1,12 @@
 <% layout('layouts/boilerplate')%>
-<div style="display:flex; justify-content:center;">
-    
-<form action="/registerDoc" method="POST" class="validated-form" novalidate>
+<%- include('../partials/header')%>
+<link rel="stylesheet" href="/css/style.css">
+<div style="margin: 120px 500px;">
+<h1>Register as Doctor</h1>
+<form action="/doctors/registerDoc" method="POST" class="validated-form" novalidate>
     
     <div class="mb-3">
-        <label class="form-label" for="username">Username</label>
+        <label class="form-label" for="username">First-Last Name</label>
         <input class="form-control" type="text" id="username" name="username" required>
         <div class="valid-feedback">
             Looks good!
@@ -26,7 +28,7 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="tc">T.C Kimlik No</label>
+        <label class="form-label" for="tc">Social Security Number (T.C)</label>
         <input class="form-control" type="text" id="tc" name="tc" required>
         <div class="valid-feedback">
             Looks good!

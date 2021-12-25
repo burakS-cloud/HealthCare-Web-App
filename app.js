@@ -11,11 +11,12 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const Doctor = require('./models/doctor');
 const Secretary = require('./models/secretary');
+//const valueCheck = require('./public/javascripts/valueCheck');
 
 
 const userRoutes = require('./routes/users');
 const doctorRoutes = require('./routes/doctors');
-const appointmentRoutes = require('./routes/appointments');
+//const appointmentRoutes = require('./routes/appointments');
 
 
 mongoose.connect('mongodb://localhost:27017/hospital', {
@@ -99,7 +100,7 @@ passport.serializeUser(function (Doctor, done) {
     } else if (userPrototype === Secretary.prototype) {
         principleType = "secretary";
     }
-    console.log(principleType);
+    //console.log(principleType);
 
     var principleInfo = new PrincipleInfo(Doctor._id, principleType, '');
     done(null,principleInfo);
@@ -133,16 +134,17 @@ passport.serializeUser(function (Doctor, done) {
 
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
+    //res.locals.currentDoctor = req.doctor;
+    //res.locals.currentSecretary = req.secretary;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
 
-app.use('/', userRoutes);
-app.use('/', doctorRoutes);
-//app.use('/campgrounds', campgroundRoutes)
-app.use('/appointments', appointmentRoutes);
+app.use('/users', userRoutes);
+app.use('/doctors', doctorRoutes);
+//app.use('/appointments', appointmentRoutes);
 
 
 
@@ -150,12 +152,14 @@ app.get('/', async (req, res) => {
     const doctors = await Doctor.find({});
     //const sections = await Section.find({});
     res.render('home', { doctors });
+    
 });
 
 
-app.all('*', (req, res, next) => {
+
+/*app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404))
-})
+})*/
 
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;

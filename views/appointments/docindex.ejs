@@ -5,17 +5,19 @@
 <h1>All Appointments</h1>
 <table>
     <tr>
+        <th>Patient Name</th>
         <th>Appointment Section</th>
         <th>Doctor</th>
         <th>Date</th>
       </tr>
-<% for (let appointment of user.appointments){%>  
+<<% for (let appointment of doctor.patientAppointments){%>  
         <tr>
-          
+          <td><%=  %></td>
           <td><%= appointment.appointmentSection %></td>
           <td><%= appointment.appointmentDoctor %></td>
           <td> <%= appointment.appointmentDate %> - <b><%= appointment.appointmentTime %></b> </td>
         </tr>  
 <% }%>
 </table>
+
 </div>
