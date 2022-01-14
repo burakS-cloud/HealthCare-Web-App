@@ -44,12 +44,17 @@ router.post('/:id', isLoggedIn, catchAsync(async (req, res) => {
         const user = await User.findById(id);
         const { appointmentSection, appointmentDoctor, appointmentDate, appointmentTime } = req.body;
         
-        const appointment = new Appointment({ appointmentSection, appointmentDoctor, appointmentDate, appointmentTime});
+        const appointment = new Appointment({ appointmentSection, appointmentDoctor, appointmentDate, appointmentTime, appointmentOwner: user.name });
         
-        for(let doc of doctors) {
-            if(doc.username == appointmentDoctor){
-                const theDoctor = await Doctor.findById(doc._id).populate('patientAppointments');  
+        for(let i = 0; i < doctors.length; i++) {
+            if(doctors[i].username == appointmentDoctor){
+                const theDoctor = await Doctor.findById(doctors[i]._id).populate('patientAppointments').populate('patients');  
                 theDoctor.patientAppointments.push(appointment);
+                theDoctor.patients.push(user);
+                /*if(user.appointments.length === 0){
+                    theDoctor.patients.push(user);
+                }*/
+                
                 //console.log(theDoctor);
                 theDoctor.save();
                 break;
@@ -118,6 +123,27 @@ router.get('/:id', isLoggedIn, catchAsync(async (req, res) => {
     res.render('appointments/index', { user });
     
 }))
+
+router.put('/:id/:appid', isLoggedIn, catchAsync(async (req, res) => {
+    const { appid } = req.params;
+    const { id } = req.params;
+    //let appoID = mongoose.mongo.ObjectID(appid);
+    //let docID = mongoose.mongo.ObjectID(docid)
+    //const doctor = await Doctor.findById(docid).populate('patientAppointments');
+    //doctor.patientAppointments
+    const appo = await Appointment.findByIdAndUpdate({_id: appid}, { appointmentCondition : false});
+    console.log(appo);
+    
+    
+    res.redirect(`/users/${id}`);
+}));
+
+router.get('/:id/cancelledusr', isLoggedIn, catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const user = await User.findById(id).populate('appointments');
+    res.render('appointments/cancelleduser', { user });
+    
+}));
 
 //We will see what we'll do with this
 

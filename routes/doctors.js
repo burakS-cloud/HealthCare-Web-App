@@ -4,7 +4,12 @@ const passport = require('passport');
 const catchAsync = require('../utils/catchAsync');
 const Doctor = require('../models/doctor');
 const Appointment = require('../models/appointment');
+const User = require('../models/user');
 const { isLoggedIn } = require('../middleware');
+
+
+
+
 
 router.get('/registerDoc', (req, res) => {
     res.render('doctors/registerDoc');
@@ -44,17 +49,100 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 })
 
+router.put('/:docid/:appid', isLoggedIn, catchAsync(async (req, res) => {
+    const { appid } = req.params;
+    const { docid } = req.params;
+    //let appoID = mongoose.mongo.ObjectID(appid);
+    //let docID = mongoose.mongo.ObjectID(docid)
+    //const doctor = await Doctor.findById(docid).populate('patientAppointments');
+    //doctor.patientAppointments
+    const appo = await Appointment.findByIdAndUpdate({_id: appid}, { appointmentCondition : false});
+    //console.log(appo);
+    
+    
+    res.redirect(`/doctors/${docid}`);
+}));
+
 router.get('/:docid', isLoggedIn, catchAsync(async (req, res) => {
     const { docid } = req.params;
-    const doctor = await Doctor.findById(docid).populate('patientAppointments');
-    //Might not need to find all appointments, since it may be finding the every appointment, even the ones this user doesn't own.
-    //the appointments this user has can be reached/retrieved just by passing the user, since we already populated the user.
-    //that's my guess, so appointments/index, { user } might be enough, let's see...
-    //const appointments = await Appointment.find({});  
+    const doctor = await Doctor.findById(docid).populate('patientAppointments').populate('patients');
     res.render('appointments/docindex', { doctor });
     
 }));
 
+router.get('/:docid/cancelled', isLoggedIn, catchAsync(async (req, res) => {
+    const { docid } = req.params;
+    const doctor = await Doctor.findById(docid).populate('patientAppointments').populate('patients');
+    res.render('appointments/cancelleddoc', { doctor });
+    
+}));
+
+router.get('/:docid/:userid/controlapp', isLoggedIn, catchAsync(async (req, res) => {
+    const { docid } = req.params;
+    const { userid } = req.params;
+    const doctor = await Doctor.findById(docid).populate('patientAppointments').populate('patients');
+    const user = await User.findById(userid).populate('appointments');
+    res.render('appointments/controlapp', { doctor, user });
+    
+}));
+
+router.delete('/:docid/:appid/:userid', isLoggedIn, catchAsync(async (req, res) => {
+    const { docid } = req.params;
+    const { appid } = req.params;
+    const { userid } = req.params;
+
+    await Doctor.findByIdAndUpdate(docid, {$pull: { patientAppointments: appid }});
+
+    await User.findByIdAndUpdate(userid, {$pull: { appointments: appid }});
+
+    const user = await User.findById(userid);
+
+    if(user.appointments.length === 0){
+        await Doctor.findByIdAndUpdate(docid, {$pull: { patients: userid }});
+    }
+
+    await Appointment.findByIdAndDelete(appid);
+
+    res.redirect(`/doctors/${docid}/cancelled`);
+    
+}));
+
+router.post('/:id', isLoggedIn, catchAsync(async (req, res) => {
+    try {
+        const doctors = await Doctor.find({});
+        const { id } = req.params;
+        const user = await User.findById(id);
+        const { appointmentSection, appointmentDoctor, appointmentDate, appointmentTime } = req.body;
+        
+        const appointment = new Appointment({ appointmentSection, appointmentDoctor, appointmentDate, appointmentTime, appointmentOwner: user.name });
+        
+        for(let i = 0; i < doctors.length; i++) {
+            if(doctors[i].username == appointmentDoctor){
+                const theDoctor = await Doctor.findById(doctors[i]._id).populate('patientAppointments').populate('patients');  
+                theDoctor.patientAppointments.push(appointment);
+                theDoctor.patients.push(user);
+                /*if(user.appointments.length === 0){
+                    theDoctor.patients.push(user);
+                }*/
+                
+                theDoctor.save();
+                break;
+            }
+        }   
+        user.appointments.push(appointment);
+        await appointment.save();
+        await user.save();
+        
+        req.flash('success', 'Created new appointment!');
+        
+        res.redirect(`/users/${id}`);
+    }
+    catch(e) {
+        req.flash('error', e.message);
+        res.redirect('/users/login');
+    }
+    
+}));
 
 
 module.exports = router;
