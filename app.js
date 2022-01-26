@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -10,6 +12,12 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 const Doctor = require('./models/doctor');
 const Secretary = require('./models/secretary');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+
+
+
+
 
 
 const userRoutes = require('./routes/users');
@@ -38,6 +46,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(mongoSanitize());
+app.use(helmet({contentSecurityPolicy:false}));
 
 const sessionConfig = {
     secret: 'thisshouldbeabettersecret!',
